@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<title>AI Chat</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #343541;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.chat {
+    width: 400px;
+    height: 550px;
+    background: #202123;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    padding: 12px;
+    text-align: center;
+    font-weight: bold;
+    border-bottom: 1px solid #444;
+}
+
+.messages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+.user {
+    text-align: right;
+    color: #4ade80;
+    margin: 6px 0;
+}
+
+.ai {
+    text-align: left;
+    color: #e5e7eb;
+    margin: 6px 0;
+}
+
+.input-area {
+    display: flex;
+    border-top: 1px solid #444;
+}
+
+input {
+    flex: 1;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    outline: none;
+    background: #40414f;
+    color: white;
+}
+
+button {
+    border: none;
+    background: #10a37f;
+    color: white;
+    padding: 12px 16px;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="chat">
+    <div class="header">🤖 AI Chat</div>
+    <div class="messages" id="messages"></div>
+
+    <div class="input-area">
+        <input id="input" placeholder="Skriv en besked..." />
+        <button onclick="send()">Send</button>
+    </div>
+</div>
+
+<script>
+const input = document.getElementById("input");
+const messages = document.getElementById("messages");
+
+input.addEventListener("keydown", e => {
+    if (e.key === "Enter") send();
+});
+
+function send() {
+    if (input.value.trim() === "") return;
+
+    addMessage("Du", input.value, "user");
+    aiAnswer(input.value);
+    input.value = "";
+}
+
+function addMessage(sender, text, cls) {
+    const div = document.createElement("div");
+    div.className = cls;
+    div.textContent = sender + ": " + text;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+}
+
+function aiAnswer(text) {
+    let reply = "I can understand many languages 🌍";
+
+    if (text.match(/[æøå]/i)) {
+        reply = "Jeg forstår dansk 🇩🇰 Hvordan kan jeg hjælpe?";
+    } 
+    else if (text.match(/[\u0600-\u06FF]/)) {
+        reply = "أستطيع التحدث بالعربية 🇸🇦 كيف أساعدك؟";
+    } 
+    else if (text.match(/[а-я]/i)) {
+        reply = "Я понимаю русский 🇷🇺 Чем могу помочь?";
+    } 
+    else if (text.match(/[áéíóúñ]/i)) {
+        reply = "Puedo responder en español 🇪🇸 ¿En qué puedo ayudarte?";
+    } 
+    else {
+        reply = "I understand English 🇬🇧 How can I help you?";
+    }
+
+    setTimeout(() => {
+        addMessage("AI", reply, "ai");
+    }, 600);
+}
+</script>
+
+</body>
+</html>
